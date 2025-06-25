@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAPA Jateng - Dashboard</title>
+  <meta name="theme-color" content="#0057b8">
+  <link rel="manifest" href="app.webmanifest">
+  <style>
+    /* === VARIABEL & RESET === */
+    :root {
+      --primary: #0057b8;
+      --primary-dark: #003a7a;
+      --secondary: #e6f0ff;
+      --accent: #ff6b00;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --text: #333;
+      --text-light: #666;
+      --gray: #f0f0f0;
+      --border: #ddd;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    
+    /* === HEADER & NAVIGASI === */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo {
+      background-color: white;
+      border-radius: 8px;
+      padding: 5px;
+      margin-right: 15px;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .header-text {
+      flex: 1;
+    }
+    
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    
+    .subtitle {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-top: 3px;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .icon-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      position: relative;
+      cursor: pointer;
+      padding: 5px;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* === NAVIGASI UTAMA === */
+    .main-nav {
+      display: flex;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 82px;
+      z-index: 90;
+    }
+    
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .nav-item.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+    }
+    
+    /* === KONTEN UTAMA === */
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+    
+    .section {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+    
+    .section-title {
+      background-color: var(--secondary);
+      color: var(--primary);
+      padding: 15px 20px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background-color: var(--gray);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: var(--success);
+      border-radius: 3px;
+    }
+    
+    .progress-text {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 5px;
+      text-align: right;
+    }
+    
+    .doc-list {
+      list-style: none;
+    }
+    
+    .doc-item {
+      padding: 16px 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .doc-item:last-child {
+      border-bottom: none;
+    }
+    
+    .doc-item:hover {
+      background-color: #f5f9ff;
+    }
+    
+    .doc-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--secondary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    
+    .doc-content {
+      flex: 1;
+    }
+    
+    .doc-title {
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    
+    .doc-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+    
+    .download-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      margin-left: 10px;
+    }
+    
+    /* === DASHBOARD LPSE === */
+    .lpse-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    
+    .lpse-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .lpse-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .lpse-card h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .lpse-card h3 i {
+      font-size: 1.5rem;
+    }
+    
+    .lpse-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .stat-item {
+      background: var(--gray);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+    
+    /* === AKUN SECTION === */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+    
+    .profile-info h2 {
+      margin-bottom: 5px;
+    }
+    
+    .profile-info p {
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+    
+    .badge {
+      background: var(--accent);
+      color: white;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    
+    .account-menu {
+      list-style: none;
+      padding: 20px 0;
+    }
+    
+    .account-item {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .account-item:last-child {
+      border-bottom: none;
+    }
+    
+    .account-item:hover {
+      background: var(--secondary);
+    }
+    
+    .account-item i {
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: var(--primary);
+      width: 30px;
+      text-align: center;
+    }
+    
+    /* === FOOTER & INSTALL BUTTON === */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      background: white;
+      border-top: 1px solid var(--border);
+    }
+    
+    #installButton {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      margin: 10px auto 20px;
+      display: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,87,184,0.3);
+      transition: background 0.3s;
+    }
+    
+    #installButton:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    /* === RESPONSIF === */
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0 10px;
+      }
+      
+      h1 {
+        font-size: 1.2rem;
+      }
+      
+      .doc-item {
+        padding: 12px 15px;
+      }
+      
+      .lpse-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .avatar {
+        margin: 0 auto 15px;
+      }
+    }
+    
+    /* === ICON FONT === */
+    @font-face {
+      font-family: 'Material Icons';
+      font-style: normal;
+      font-weight: 400;
+      src: url(https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+    }
+    
+    .material-icons {
+      font-family: 'Material Icons';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo-container">
+        <div class="logo">SJ</div>
+        <div class="header-text">
+          <h1>SAPA Jateng</h1>
+          <div class="subtitle">Sahabat Pendampingan Pengadaan Jawa Tengah</div>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button class="icon-btn" id="notificationBtn">
+          <span class="material-icons">notifications</span>
+          <span class="notification-badge">3</span>
+        </button>
+        <button class="icon-btn" id="accountBtn">
+          <span class="material-icons">account_circle</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Navigasi Utama -->
+  <div class="main-nav">
+    <div class="nav-item active" data-target="dokumen">Dokumen</div>
+    <div class="nav-item" data-target="progress">Progress</div>
+    <div class="nav-item" data-target="lpse">Dashboard LPSE</div>
+    <div class="nav-item" data-target="akun">Akun</div>
+  </div>
+  
+  <!-- Konten Utama: Dokumen -->
+  <main id="dokumenContent" class="content-section">
+    <!-- Progress Pengisian Dokumen -->
+    <section class="section">
+      <div class="section-title">
+        <span>Progress Pengisian Dokumen</span>
+        <span>65% Lengkap</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 65%"></div>
+      </div>
+      <div class="progress-text">13 dari 20 dokumen terisi</div>
+    </section>
+    
+    <!-- Form Pendampingan -->
+    <section class="section">
+      <div class="section-title">Form Pendampingan</div>
+      <ul class="doc-list">
+        <li class="doc-item">
+          <div class="doc-icon"><span class="material-icons">description</span></div>
+          <div class="doc-content">
+            <div class="doc-title">Form Pendampingan Persiapan Pengadaan TA 2025</div>
+            <div class="doc-subtitle">Status: <span style="color:var(--success)">Selesai</span></div>
+          </div>
+          <button class="download-btn"><span class="material-icons">download</span></button>
+        </li>
+        <li class="doc-item">
+          <div class="doc-icon"><span class="material-icons">menu_book</span></div>
+          <div class="doc-content">
+            <div class="doc-title">Panduan Input Form Pendampingan Persiapan Pengadaan TA 2025</div>
+            <div class="doc-subtitle">Status: <span style="color:var(--warning)">Dalam Proses</span></div>
+          </div>
+          <button class="download-btn"><span class="material-icons">download</span></button>
+        </li>
+      </ul>
+    </section>
+    
+    <!-- Template Dok Pendampingan -->
+    <section class="section">
+      <div class="section-title">Template Dok Pendampingan</div>
+      <ul class="doc-list">
+        <li class="doc-item">
+          <div class="doc-icon"><span class="material-icons">drafts</span></div>
+          <div class="doc-content">
+            <div class="doc-title">Template Surat Usulan Pendampingan Persiapan Pengadaan</div>
+          </div>
+          <button class="download-btn"><span class="material-icons">download</span></button>
+        </li>
+        <li class="doc-item">
+          <div class="doc-icon"><span class="material-icons">construction</span></div>
+          <div class="doc-content">
+            <div class="doc-title">Template Uraian Pekerjaan, Identifikasi Bahaya, dan Penetapan Risiko Pekerjaan Konstruksi</div>
+          </div>
+          <button class="download-btn"><span class="material-icons">download</span></button>
+        </li>
+        <li class="doc-item">
+          <div class="doc-icon"><span class="material-icons">schedule</span></div>
+          <div class="doc-content">
+            <div class="doc-title">Template Rencana Jadwal Pelaksanaan Pengadaan Barang Jasa / Waktu Penggunaan Barang Jasa</div>
+          </div>
+          <button class="download-btn"><span class="material-icons">download</span></button>
+        </li>
+      </ul>
+    </section>
+    
+    <!-- Template Analisis Pasar -->
+    <section class="section">
+      <div class="section-title">Template Analisis Pasar</div>
+      <ul class="doc-list">
+        <li class="doc-item">
+          <div class="doc-icon"><span class="material-icons">analytics</span></div>
+          <div class="doc-content">
+            <div class="doc-title">Model Dokumen Pemilihan (MDP) Pusat</div>
+          </div>
+          <button class="download-btn"><span class="material-icons">download</span></button>
+        </li>
+      </ul>
+    </section>
+    
+    <!-- Template Surat Pernyataan -->
+    <section class="section">
+      <div class="section-title">Template Surat Pernyataan</div>
+      <ul class="doc-list">
+        <li class="doc-item">
+          <div class="doc-icon"><span class="material-icons">assignment</span></div>
+          <div class="doc-content">
+            <div class="doc-title">Template Surat Pernyataan Pemenuhan SIKOMPAK TA 2024</div>
+          </div>
+          <button class="download-btn"><span class="material-icons">download</span></button>
+        </li>
+      </ul>
+    </section>
+  </main>
+  
+  <!-- Konten: Progress -->
+  <main id="progressContent" class="content-section" style="display:none">
+    <section class="section">
+      <div class="section-title">Progress Pengisian Dokumen</div>
+      <div style="padding:20px">
+        <div style="margin-bottom:20px">
+          <div style="display:flex; justify-content:space-between; margin-bottom:5px">
+            <span>Form Pendampingan</span>
+            <span>80%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:80%; background-color:var(--success)"></div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom:20px">
+          <div style="display:flex; justify-content:space-between; margin-bottom:5px">
+            <span>Template Dokumen</span>
+            <span>65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:65%; background-color:var(--warning)"></div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom:20px">
+          <div style="display:flex; justify-content:space-between; margin-bottom:5px">
+            <span>Analisis Pasar</span>
+            <span>40%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:40%; background-color:var(--warning)"></div>
+          </div>
+        </div>
+        
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:5px">
+            <span>Surat Pernyataan</span>
+            <span>95%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:95%; background-color:var(--success)"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-title">Timeline Penyelesaian</div>
+      <div style="padding:20px">
+        <div style="display:flex; margin-bottom:20px; border-left:3px solid var(--primary); padding-left:15px">
+          <div style="margin-right:15px">
+            <div style="background:var(--primary); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center">
+              <span class="material-icons">check</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-weight:500">Pendaftaran Selesai</div>
+            <div style="color:var(--text-light); font-size:0.9rem">15 Juni 2025</div>
+          </div>
+        </div>
+        
+        <div style="display:flex; margin-bottom:20px; border-left:3px solid var(--primary); padding-left:15px">
+          <div style="margin-right:15px">
+            <div style="background:var(--primary); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center">
+              <span class="material-icons">check</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-weight:500">Verifikasi Dokumen</div>
+            <div style="color:var(--text-light); font-size:0.9rem">25 Juni 2025</div>
+          </div>
+        </div>
+        
+        <div style="display:flex; margin-bottom:20px; border-left:3px solid var(--primary); padding-left:15px">
+          <div style="margin-right:15px">
+            <div style="background:var(--warning); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center">
+              <span class="material-icons">schedule</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-weight:500">Pengisian Dokumen Pendampingan</div>
+            <div style="color:var(--text-light); font-size:0.9rem">Target: 10 Juli 2025</div>
+          </div>
+        </div>
+        
+        <div style="display:flex; border-left:3px solid var(--gray); padding-left:15px">
+          <div style="margin-right:15px">
+            <div style="background:var(--gray); color:var(--text-light); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center">
+              <span class="material-icons">pending</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-weight:500">Persetujuan Akhir</div>
+            <div style="color:var(--text-light); font-size:0.9rem">Target: 20 Juli 2025</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Konten: Dashboard LPSE -->
+  <main id="lpseContent" class="content-section" style="display:none">
+    <section class="section">
+      <div class="section-title">Dashboard LPSE Provinsi Jawa Tengah</div>
+      <div class="lpse-grid">
+        <div class="lpse-card">
+          <h3><span class="material-icons">summarize</span> Statistik Pengadaan</h3>
+          <div class="lpse-stats">
+            <div class="stat-item">
+              <div class="stat-value">142</div>
+              <div class="stat-label">Pengadaan Aktif</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">87</div>
+              <div class="stat-label">Selesai</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">Rp 2,1 T</div>
+              <div class="stat-label">Total Nilai</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">Rp 178 M</div>
+              <div class="stat-label">Efisiensi</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lpse-card">
+          <h3><span class="material-icons">trending_up</span> Progres Tahunan</h3>
+          <div style="margin-top:20px; text-align:center">
+            <div style="background:var(--gray); height:200px; border-radius:10px; display:flex; align-items:flex-end; justify-content:space-around; padding:10px">
+              <div style="display:flex; flex-direction:column; align-items:center">
+                <div style="background:var(--primary); width:30px; height:40px; border-radius:5px"></div>
+                <div style="margin-top:5px">Q1</div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:center">
+                <div style="background:var(--primary); width:30px; height:70px; border-radius:5px"></div>
+                <div style="margin-top:5px">Q2</div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:center">
+                <div style="background:var(--primary); width:30px; height:120px; border-radius:5px"></div>
+                <div style="margin-top:5px">Q3</div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:center">
+                <div style="background:var(--primary); width:30px; height:80px; border-radius:5px"></div>
+                <div style="margin-top:5px">Q4</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lpse-card">
+          <h3><span class="material-icons">warning</span> Pengadaan Perlu Perhatian</h3>
+          <div style="margin-top:15px">
+            <div style="display:flex; align-items:center; padding:10px 0; border-bottom:1px solid var(--border)">
+              <span class="material-icons" style="color:var(--warning)">error</span>
+              <div style="margin-left:10px">
+                <div>Pembangunan Jembatan Semarang</div>
+                <div style="font-size:0.9rem; color:var(--text-light)">Deadline: 30 Juli 2025</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; padding:10px 0; border-bottom:1px solid var(--border)">
+              <span class="material-icons" style="color:var(--danger)">priority_high</span>
+              <div style="margin-left:10px">
+                <div>Pengadaan Alat Berat Kab. Banyumas</div>
+                <div style="font-size:0.9rem; color:var(--text-light)">Terlambat 15 hari</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; padding:10px 0">
+              <span class="material-icons" style="color:var(--warning)">error</span>
+              <div style="margin-left:10px">
+                <div>Rehabilitasi Jalan Raya Purwokerto</div>
+                <div style="font-size:0.9rem; color:var(--text-light)">Dokumen belum lengkap</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Konten: Akun -->
+  <main id="akunContent" class="content-section" style="display:none">
+    <section class="section">
+      <div class="profile-header">
+        <div class="avatar">AJ</div>
+        <div class="profile-info">
+          <h2>Aji Setyawan, S.T.</h2>
+          <p>Pengawas Konstruksi | Dinas PUPR Jateng</p>
+          <div class="badge">Akun Verified</div>
+        </div>
+      </div>
+      
+      <ul class="account-menu">
+        <li class="account-item">
+          <i class="material-icons">person</i>
+          <div>Profil Saya</div>
+        </li>
+        <li class="account-item">
+          <i class="material-icons">notifications</i>
+          <div>Notifikasi</div>
+          <span class="notification-badge">3</span>
+        </li>
+        <li class="account-item">
+          <i class="material-icons">lock</i>
+          <div>Keamanan Akun</div>
+        </li>
+        <li class="account-item">
+          <i class="material-icons">help</i>
+          <div>Bantuan & Dukungan</div>
+        </li>
+        <li class="account-item">
+          <i class="material-icons">settings</i>
+          <div>Pengaturan Aplikasi</div>
+        </li>
+        <li class="account-item">
+          <i class="material-icons">logout</i>
+          <div>Keluar</div>
+        </li>
+      </ul>
+    </section>
+    
+    <section class="section">
+      <div class="section-title">Aktivitas Terakhir</div>
+      <ul class="doc-list">
+        <li class="doc-item">
+          <i class="material-icons">history</i>
+          <div class="doc-content">
+            <div class="doc-title">Mengunduh Template Surat Pernyataan</div>
+            <div class="doc-subtitle">25 Juni 2025, 14:30 WIB</div>
+          </div>
+        </li>
+        <li class="doc-item">
+          <i class="material-icons">history</i>
+          <div class="doc-content">
+            <div class="doc-title">Mengisi Form Pendampingan</div>
+            <div class="doc-subtitle">24 Juni 2025, 09:15 WIB</div>
+          </div>
+        </li>
+        <li class="doc-item">
+          <i class="material-icons">history</i>
+          <div class="doc-content">
+            <div class="doc-title">Melihat Dashboard LPSE</div>
+            <div class="doc-subtitle">23 Juni 2025, 16:45 WIB</div>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+  
+  <!-- Footer & Install Button -->
+  <footer>
+    <button id="installButton">Instal Aplikasi SAPA</button>
+    <p>Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Jawa Tengah</p>
+    <p>© 2025 - Sistem Aplikasi Pendampingan Pengadaan</p>
+  </footer>
+  
+  <!-- PWA Scripts -->
+  <script>
+    // ===== PWA Functionality =====
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker terdaftar'))
+          .catch(err => console.error('Pendaftaran gagal:', err));
+      });
+    }
+    
+    // Install Prompt
+    let deferredPrompt;
+    const installButton = document.getElementById('installButton');
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installButton.style.display = 'block';
+    });
+    
+    installButton.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Pengguna menerima instalasi');
+          }
+          deferredPrompt = null;
+        });
+      }
+    });
+    
+    // ===== Navigasi =====
+    const navItems = document.querySelectorAll('.nav-item');
+    const contentSections = document.querySelectorAll('.content-section');
+    
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Hapus class active dari semua item
+        navItems.forEach(nav => nav.classList.remove('active'));
+        
+        // Tambah class active ke item yang diklik
+        item.classList.add('active');
+        
+        // Sembunyikan semua konten
+        contentSections.forEach(section => {
+          section.style.display = 'none';
+        });
+        
+        // Tampilkan konten yang sesuai
+        const target = item.getAttribute('data-target');
+        document.getElementById(`${target}Content`).style.display = 'block';
+      });
+    });
+    
+    // ===== Dokumen Functionality =====
+    // Simulasi download
+    document.querySelectorAll('.download-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const docTitle = this.closest('.doc-item').querySelector('.doc-title').textContent;
+        alert(`Download dimulai: "${docTitle}"\n\n(Catatan: Demo simulasi, file segera tersedia)`);
+        
+        // Tampilkan notifikasi
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('Download Dimulai', {
+            body: `Dokumen "${docTitle.substring(0, 30)}..." sedang diunduh`,
+            icon: 'icon-192.png'
+          });
+        }
+      });
+    });
+    
+    // Notifikasi
+    const notificationBtn = document.getElementById('notificationBtn');
+    notificationBtn.addEventListener('click', () => {
+      alert('Anda memiliki 3 notifikasi baru:\n\n1. Dokumen perlu verifikasi\n2. Deadline pengisian mendatang\n3. Pembaruan sistem');
+    });
+    
+    // Akun
+    const accountBtn = document.getElementById('accountBtn');
+    accountBtn.addEventListener('click', () => {
+      // Aktifkan tab akun
+      navItems.forEach(nav => nav.classList.remove('active'));
+      document.querySelector('.nav-item[data-target="akun"]').classList.add('active');
+      
+      contentSections.forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById('akunContent').style.display = 'block';
+    });
+    
+    // Deteksi koneksi
+    window.addEventListener('online', () => {
+      console.log('Status: Online');
+    });
+    
+    window.addEventListener('offline', () => {
+      console.log('Status: Offline');
+      alert('Anda sedang offline. Dokumen tetap bisa diakses!');
+    });
+    
+    // Minta izin notifikasi
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        console.log('Permission:', permission);
+      });
+    }
+  </script>
+</body>
+</html>
